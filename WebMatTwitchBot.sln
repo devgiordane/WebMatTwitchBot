@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMatBot", "WebMatBot\WebMatBot.csproj", "{939FAEC2-F6BA-4AA7-B487-A4933F17ACCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{939FAEC2-F6BA-4AA7-B487-A4933F17ACCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{939FAEC2-F6BA-4AA7-B487-A4933F17ACCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{939FAEC2-F6BA-4AA7-B487-A4933F17ACCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{939FAEC2-F6BA-4AA7-B487-A4933F17ACCB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40D16D0D-F5EA-48B0-B0F4-96BB9CE489DB}
+	EndGlobalSection
+EndGlobal

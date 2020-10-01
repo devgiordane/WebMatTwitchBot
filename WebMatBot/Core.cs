@@ -91,7 +91,7 @@ namespace WebMatBot
             }
         }
 
-        private static async void Analizer(string input)
+        public static async void Analizer(string input)
         {
             //must responde ping pong
             if (input.Contains("PING")) 
@@ -109,10 +109,14 @@ namespace WebMatBot
             //check all counters and increase if necessary
             Counters.CheckCounter(input);
 
+
+            var words = input.ToLower().Split(" ");
             // verifica comandos
             foreach (var cmd in Commands.List)
-                if (input.ToLower().Contains(cmd.Key.ToLower())) cmd.Value.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1]);
-
+            {
+                if (words.Any(q => q.Trim().Replace(":", "").Equals(cmd.Key.ToLower())))
+                    cmd.Value.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1]);
+            }
         }
     }
 }

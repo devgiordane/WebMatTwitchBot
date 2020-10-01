@@ -26,8 +26,9 @@ namespace WebMatBot
 
                     if (line.ToLower().Contains("!setproject")) Commands.ProjectLink = line.Split(" ")[1];
                     if (line.ToLower().Contains("!settetris")) Commands.TetrisLink = line.Split(" ")[1];
-                    if (line.ToLower().Contains("!setspeaker")) Commands.Speaker = bool.Parse(line.Split(" ")[1]);
+                    if (line.ToLower().Contains("!setspeaker")) Speakers.Speaker = bool.Parse(line.Split(" ")[1]);
 
+                    Core.Analizer(line);
                 }
                 catch (Exception except)
                 {
