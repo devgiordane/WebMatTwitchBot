@@ -6,14 +6,14 @@ Um simples bot para automatizar o chat do seu canal na twitch.
   O bot, por padrão, é o mesmo usuário do canal que se deseja o bot.<br/>
   Existem dois modelos de Text to Speech (TTS) (texto para fala):<br/>
     A - Comando !Speak chama o power shell e utiliza o idioma padrão do seu windows para reproduzir a fala.<br/>
-    B - Comando !SpeakPortuga chama o azure serviços cognitivos para reproduzir a fala (necessita configuração)<br/>
+    B - Comando !SpeakPt ou !SpeakEn chama o azure serviços cognitivos para reproduzir a fala (necessita configuração)<br/>
 
 ## Primeiro run
   Por segurança, o arquivo Parameters.cs vem com seus campos em branco. É necessário fazer o preenchimento antes de rodar o bot.
   
   1 - Para receber o valor da propriedade oauth, acesse https://twitchapps.com/tmi/ e conecte-se utilizando a conta que deseja ter o botchat.<br/>
   2 - Copie o codigo mostrado no item anterior e cole no campo oauth, no campo user preencha com o mesmo usuario utilizado anteriormente.<br/>
-  B - Caso você deseja utilizar o !speakportuga (azure serviços cognitivos) é necessário ir em : www.portal.azure.com, cadastrar-se, e instalar Serviço Cognitivo.
+  B - Caso você deseja utilizar o !speakPt !speakEn (azure serviços cognitivos) é necessário ir em : www.portal.azure.com, cadastrar-se, e instalar Serviço Cognitivo.
       Depois de Instalado, pegar a key do serviço cognitivo e configurar o Parameters.cs;<br/>
   
 ## Customização
@@ -34,14 +34,14 @@ Just a bot to respond your twitch chat.
   By default, our bot uses the same userbot and channel target.<br/>
   There are two ways to use Text-to-Speech (TTS):<br/>
     A - Command !Speak, this uses the power shell to call all librarys. So its works fine on windows<br/>
-    B - Command !SpeakPortuga, this uses azure cognitive services to do a machine speak<br/>
+    B - Command !SpeakPt or !SpeakEn, this uses azure cognitive services to do a machine speak<br/>
 
 ## First run
   For security, Parameters.cs file has your fields empty. Its necessary fill it before first run.
 
   1 - To get the value to fill oauth field, access https://twitchapps.com/tmi/ and click on Connect button.<br/>
   2 - Copy the code on before step and fill oauth field. user field must be filled with the same user used before.<br/>
-  B - If you are going to use !SpeakPortuga (azure cognitive services) you need get key and location from www.portal.azure.com; Maybe you should sign-in and install the cognitive service.<br/>
+  B - If you are going to use !SpeakPt or !SpeakEn (azure cognitive services) you need get key and location from www.portal.azure.com; Maybe you should sign-in and install the cognitive service.<br/>
 
 ## Customization
   You can change all commands in Commands.cs, List field. (You can see examples there)<br/>
