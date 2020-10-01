@@ -7,6 +7,6 @@ namespace WebMatBot
     public static class Parameters
     {
         public static string OAuth = ""; //https://twitchapps.com/tmi/
-        public static string User = ""; 
+        public static string User = "";
     }
 }

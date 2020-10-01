@@ -15,14 +15,12 @@ namespace WebMatBot
 
         public static void CheckCounter(string input)
         {
-
-
             //verifica counters
             lock (List)
             {
                 int total = List.Count;
                 for (int i = 0; i < total; i++)
-                    if (input.Contains(List.ElementAt(i).Key.ToLower())) List[List.ElementAt(i).Key]++;
+                    if (input.ToLower().Contains(List.ElementAt(i).Key.ToLower())) List[List.ElementAt(i).Key]++;
             }
         }
 

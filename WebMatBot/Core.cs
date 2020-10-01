@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -11,6 +12,9 @@ namespace WebMatBot
     public static class Core
     {
         private static ClientWebSocket webSocket { get; set; }
+
+        //all words in lowercase
+        private static List<string> badWords = new List<string> { "mongoloide","mongolóide","mongo","pinto", "buceta" };
 
         public static async void Start()
         {
@@ -90,14 +94,24 @@ namespace WebMatBot
         private static async void Analizer(string input)
         {
             //must responde ping pong
-            if (input.Contains("PING")) await Send("PONG", CancellationToken.None);
+            if (input.Contains("PING")) 
+            { 
+                await Send("PONG", CancellationToken.None);
+                return; 
+            }
 
+            var filter = input.ToLower();
+            if (badWords.Any(s => filter.Contains(s)))
+            {
+                await Respond("Sua Mensagem contém palavras impróprias e não será repassada ao nosso bot");
+                return;
+            }
             //check all counters and increase if necessary
             Counters.CheckCounter(input);
 
             // verifica comandos
             foreach (var cmd in Commands.List)
-                if (input.ToLower().Contains(cmd.Key.ToLower())) cmd.Value.Invoke();
+                if (input.ToLower().Contains(cmd.Key.ToLower())) cmd.Value.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1]);
 
         }
     }
