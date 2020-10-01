@@ -13,6 +13,7 @@ namespace WebMatBot
         static async Task Main(string[] args)
         {
             await Task.Run(() => Core.Start()); // run the core of twitch connection in a new thread
+            await Task.Run(() =>  Speakers.Start());
             await ListeningNewSettings(); // to set new parameters while running
         }
 
@@ -24,9 +25,23 @@ namespace WebMatBot
                 {
                     var line = Console.ReadLine();
 
-                    if (line.ToLower().Contains("!setproject")) Commands.ProjectLink = line.Split(" ")[1];
-                    if (line.ToLower().Contains("!settetris")) Commands.TetrisLink = line.Split(" ")[1];
-                    if (line.ToLower().Contains("!setspeaker")) Speakers.Speaker = bool.Parse(line.Split(" ")[1]);
+                    if (line.ToLower().Contains("!setproject"))
+                    {
+                        Commands.ProjectLink = line.Split(" ")[1];
+                        Console.WriteLine("Projet link is :" + Commands.ProjectLink);
+                    }
+
+                    if (line.ToLower().Contains("!settetris")) 
+                    {
+                        Commands.TetrisLink = line.Split(" ")[1];
+                        Console.WriteLine("Tetris link is: " + Commands.TetrisLink);
+                    }
+                
+                    if (line.ToLower().Contains("!setspeaker"))
+                    {
+                        Speakers.Speaker = bool.Parse(line.Split(" ")[1]);
+                        Console.WriteLine("Speaker now is: " + Speakers.Speaker.ToString());
+                    }
 
                     Core.Analizer(line);
                 }

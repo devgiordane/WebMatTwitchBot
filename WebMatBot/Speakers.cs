@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,8 @@ namespace WebMatBot
     {
         private static SpeechConfig config = (string.IsNullOrEmpty(Parameters.AzureCognitiveKey)||string.IsNullOrEmpty(Parameters.AzureCognitiveRegion)) ? null : SpeechConfig.FromSubscription(Parameters.AzureCognitiveKey, Parameters.AzureCognitiveRegion);//https://portal.azure.com/
         public static bool Speaker { get; set; } = false;
+
+        private static IList<Action> Queue = new List<Action>();
 
         public static async Task Speak(string textToSpeech, bool wait = false)
         {
@@ -53,13 +56,75 @@ namespace WebMatBot
         {
             if (!await CheckStatus() || config == null) return;
 
-            config.SpeechSynthesisVoiceName = "pt-PT-HeliaRUS";
+            var voice = "pt-PT-HeliaRUS";
+            var vicio = "Ora Pois?";
+            config.SpeechSynthesisVoiceName = voice;
             using var synthesizer = new SpeechSynthesizer(config);
 
-            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech);
+            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}",voice).Replace("{posmsg}", vicio);
             var result = await synthesizer.SpeakSsmlAsync(ssml);
 
             //var teste = await synthesizer.SpeakTextAsync(textToSpeech+".ora pois.");
+        }
+
+        public static async Task SpeakEnglish(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            var voice = "en-AU-Catherine";
+            var vicio = "You know?";
+            config.SpeechSynthesisVoiceName = voice;
+            using var synthesizer = new SpeechSynthesizer(config);
+
+            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", voice).Replace("{posmsg}", vicio);
+            var result = await synthesizer.SpeakSsmlAsync(ssml);
+
+            //var teste = await synthesizer.SpeakTextAsync(textToSpeech+".ora pois.");
+        }
+
+        public static Task QueueAdd (Action action)
+        {
+            if (Speaker)
+                lock (Queue)
+                    Queue.Add(action);
+
+            return Task.CompletedTask;
+        }
+
+        public static async void Start()
+        {
+            do
+            {
+                try
+                {
+                    if (!Speaker)
+                        await Task.Delay(5000);
+                    else
+                    {
+                        Task scoped = null;
+
+                        lock (Queue)
+                        {
+                            if (Queue.Count > 0)
+                            {
+                                scoped = new Task(Queue[0]);
+                                Queue.Remove(Queue[0]);
+                            }
+                        }
+
+                        if (scoped != null)
+                        {
+                            scoped.Start();
+                            scoped.Wait();
+                        }
+
+                        await Task.Delay(10000);
+                    }
+                }catch(Exception excpt)
+                {
+                    Console.WriteLine(excpt.Message) ;
+                }
+            } while (true) ;
         }
 
         private static async Task<bool> CheckStatus()

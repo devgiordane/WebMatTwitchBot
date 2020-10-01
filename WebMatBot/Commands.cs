@@ -10,7 +10,6 @@ namespace WebMatBot
         public static string ProjectLink { get; set; }
         public static string TetrisLink { get; set; }
         
-
         public static IDictionary<string, Action<string>> List = new Dictionary<string, Action<string>>()
         {
             {"!Projeto" , async (string text) => await Projeto() },
@@ -24,8 +23,9 @@ namespace WebMatBot
             {"!Exclamação" , async (string text) =>  await Exclamacao()},
             {"!DeiF5" ,async (string text) => await Cache.Respond() },
             {"!Top", async(string text) => await Counters.Respond("!top","Seu vício de falar top já está acumulado em {n} vezes...") },
-            {"!Speak", async (string text) => await Speakers.Speak(text) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakPortuga",async (string text) => await Speakers.SpeakPortuga(text) } //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!Speak", async (string text) => await Speakers.QueueAdd(async () => await Speakers.Speak(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakPt",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakPortuga(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakEn",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakEnglish(text)) } //to activate spekaer... goes to console and type "!setspeaker true"
         };
 
         private static async Task Projeto()

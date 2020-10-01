@@ -14,7 +14,7 @@ namespace WebMatBot
         private static ClientWebSocket webSocket { get; set; }
 
         //all words in lowercase
-        private static List<string> badWords = new List<string> { "mongoloide","mongolóide","mongo","pinto", "buceta" };
+        private static List<string> badWords = new List<string> { "mongoloide","mongolóide","mongo","pinto", "buceta", "toma no cu", "tomar no cu" };
 
         public static async void Start()
         {
@@ -30,8 +30,6 @@ namespace WebMatBot
                         await Send("PASS " + Parameters.OAuth, CancellationToken.None);
                         await Send("NICK " + Parameters.User, CancellationToken.None);
                         await Send("JOIN #" + Parameters.User, CancellationToken.None);
-
-                        
 
                         await Respond("Estou conectado... Muito bom estar aqui com vcs...");
 
@@ -103,7 +101,8 @@ namespace WebMatBot
             var filter = input.ToLower();
             if (badWords.Any(s => filter.Contains(s)))
             {
-                await Respond("Sua Mensagem contém palavras impróprias e não será repassada ao nosso bot");
+                await Respond("Sua Mensagem contém palavras impróprias e não será repassada ao nosso bot!");
+                await Send(@"PRIVMSG #" + Parameters.User + " :/timeout "+ input.Split("!")[0].Replace(":","") +" 1m", CancellationToken.None);
                 return;
             }
             //check all counters and increase if necessary
