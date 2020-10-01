@@ -9,7 +9,7 @@ namespace WebMatBot
 {
     public class Speakers
     {
-        private static SpeechConfig config = SpeechConfig.FromSubscription(Parameters.AzureCognitiveKey, Parameters.AzureCognitiveRegion);//https://portal.azure.com/
+        private static SpeechConfig config = (string.IsNullOrEmpty(Parameters.AzureCognitiveKey)||string.IsNullOrEmpty(Parameters.AzureCognitiveRegion)) ? null : SpeechConfig.FromSubscription(Parameters.AzureCognitiveKey, Parameters.AzureCognitiveRegion);//https://portal.azure.com/
         public static bool Speaker { get; set; } = false;
 
         public static async Task Speak(string textToSpeech, bool wait = false)
@@ -51,7 +51,7 @@ namespace WebMatBot
 
         public static async Task SpeakPortuga(string textToSpeech)
         {
-            if (!await CheckStatus()) return;
+            if (!await CheckStatus() || config == null) return;
 
             config.SpeechSynthesisVoiceName = "pt-PT-HeliaRUS";
             using var synthesizer = new SpeechSynthesizer(config);
