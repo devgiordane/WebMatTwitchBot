@@ -11,7 +11,8 @@ namespace WebMatBot
     public class Speakers
     {
         private static SpeechConfig config = (string.IsNullOrEmpty(Parameters.AzureCognitiveKey)||string.IsNullOrEmpty(Parameters.AzureCognitiveRegion)) ? null : SpeechConfig.FromSubscription(Parameters.AzureCognitiveKey, Parameters.AzureCognitiveRegion);//https://portal.azure.com/
-        public static bool Speaker { get; set; } = false;
+        //public static bool Speaker { get; set; } = false;
+        public static Status Speaker { get; set; } = Status.Disabled;
 
         private static IList<Action> Queue = new List<Action>();
 
@@ -84,7 +85,7 @@ namespace WebMatBot
 
         public static Task QueueAdd (Action action)
         {
-            if (Speaker)
+            if (Speaker != Status.Disabled)
                 lock (Queue)
                     Queue.Add(action);
 
@@ -97,7 +98,7 @@ namespace WebMatBot
             {
                 try
                 {
-                    if (!Speaker)
+                    if (Speaker == Status.Disabled || Speaker == Status.Paused)
                         await Task.Delay(5000);
                     else
                     {
@@ -129,7 +130,7 @@ namespace WebMatBot
 
         private static async Task<bool> CheckStatus()
         {
-            if (!Speaker)
+            if (Speaker == Status.Disabled)
             {
                 await Core.Respond("O Speaker está off... peça o streamer para aciona-lo...");
                 return false;
@@ -137,5 +138,12 @@ namespace WebMatBot
             else
                 return true;
         }
+    }
+
+    public enum Status
+    {
+        Disabled,
+        Enabled,
+        Paused,
     }
 }

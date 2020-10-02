@@ -24,7 +24,7 @@ namespace WebMatBot
                 try
                 {
                     var line = Console.ReadLine();
-
+                    line = line.ToLower();
                     if (line.ToLower().Contains("!setproject"))
                     {
                         Commands.ProjectLink = line.Split(" ")[1];
@@ -39,7 +39,19 @@ namespace WebMatBot
                 
                     if (line.ToLower().Contains("!setspeaker"))
                     {
-                        Speakers.Speaker = bool.Parse(line.Split(" ")[1]);
+                        switch(line.Split(" ")[1])
+                        {
+                            case "pause":
+                                Speakers.Speaker = Status.Paused;
+                                break;
+                            case "play":
+                            case "true":
+                                Speakers.Speaker = Status.Enabled;
+                                break;
+                            case "false":
+                                Speakers.Speaker = Status.Disabled;
+                                break;
+                        }
                         Console.WriteLine("Speaker now is: " + Speakers.Speaker.ToString());
                     }
 
