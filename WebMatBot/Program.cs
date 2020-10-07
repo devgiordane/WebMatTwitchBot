@@ -24,7 +24,6 @@ namespace WebMatBot
                 try
                 {
                     var line = Console.ReadLine();
-                    line = line.ToLower();
                     if (line.ToLower().Contains("!setproject"))
                     {
                         Commands.ProjectLink = line.Split(" ")[1];
@@ -36,7 +35,7 @@ namespace WebMatBot
                         Commands.TetrisLink = line.Split(" ")[1];
                         Console.WriteLine("Tetris link is: " + Commands.TetrisLink);
                     }
-                
+                    line = line.ToLower();
                     if (line.ToLower().Contains("!setspeaker"))
                     {
                         switch(line.Split(" ")[1])

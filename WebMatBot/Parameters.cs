@@ -11,5 +11,7 @@ namespace WebMatBot
 
         public static string AzureCognitiveKey = "";//https://portal.azure.com/
         public static string AzureCognitiveRegion = "";
+
+        public static string GoogleTranslateApiKey = "";
     }
 }

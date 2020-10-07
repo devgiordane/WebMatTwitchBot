@@ -68,8 +68,10 @@ namespace WebMatBot
                     {
                         var input = await reader.ReadToEndAsync();
                         Console.WriteLine(input);
-                        Analizer(input);
-                        Cache.AddToCacheMessage(input);
+                        if (await Analizer(input))
+                        {
+                            Cache.AddToCacheMessage(input);
+                        }
                     }
 
                 }
@@ -89,13 +91,13 @@ namespace WebMatBot
             }
         }
 
-        public static async void Analizer(string input)
+        public static async Task<bool> Analizer(string input)
         {
             //must responde ping pong
             if (input.Contains("PING")) 
             { 
                 await Send("PONG", CancellationToken.None);
-                return; 
+                return false; 
             }
 
             var filter = input.ToLower();
@@ -103,11 +105,10 @@ namespace WebMatBot
             {
                 await Respond("Sua Mensagem contém palavras impróprias e não será repassada ao nosso bot!");
                 await Send(@"PRIVMSG #" + Parameters.User + " :/timeout "+ input.Split("!")[0].Replace(":","") +" 1m", CancellationToken.None);
-                return;
+                return false;
             }
             //check all counters and increase if necessary
             Counters.CheckCounter(input);
-
 
             var words = input.ToLower().Split(" ");
             // verifica comandos
@@ -116,6 +117,8 @@ namespace WebMatBot
                 if (words.Any(q => q.Trim().Replace(":", "").Equals(cmd.Key.ToLower())))
                     cmd.Value.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1]);
             }
+
+            return true;
         }
     }
 }

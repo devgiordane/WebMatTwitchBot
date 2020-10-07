@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static WebMatBot.Translate;
 
 namespace WebMatBot
 {
@@ -14,7 +15,7 @@ namespace WebMatBot
         //public static bool Speaker { get; set; } = false;
         public static Status Speaker { get; set; } = Status.Disabled;
 
-        private static IList<Action> Queue = new List<Action>();
+        private static IList<Func<Task>> Queue = new List<Func<Task>>();
 
         public static async Task Speak(string textToSpeech, bool wait = false)
         {
@@ -57,39 +58,175 @@ namespace WebMatBot
         {
             if (!await CheckStatus() || config == null) return;
 
-            var voice = "pt-PT-HeliaRUS";
-            var vicio = "Ora Pois?";
-            config.SpeechSynthesisVoiceName = voice;
-            using var synthesizer = new SpeechSynthesizer(config);
+            Speaker spk = new Speaker()
+            {
+                Alert = "Ora Pois",
+                Voice = "pt-PT-HeliaRUS",
+                Diction = ""
+            };
 
-            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}",voice).Replace("{posmsg}", vicio);
-            var result = await synthesizer.SpeakSsmlAsync(ssml);
-
-            //var teste = await synthesizer.SpeakTextAsync(textToSpeech+".ora pois.");
+            await SpeakAzure(spk, textToSpeech);
         }
 
         public static async Task SpeakEnglish(string textToSpeech)
         {
             if (!await CheckStatus() || config == null) return;
 
-            var voice = "en-AU-Catherine";
-            var vicio = "You know?";
-            config.SpeechSynthesisVoiceName = voice;
-            using var synthesizer = new SpeechSynthesizer(config);
+            Speaker spk = new Speaker()
+            {
+                Alert = "Heyyy.",
+                Voice = "en-AU-Catherine",
+                Diction = ""
+            };
 
-            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", voice).Replace("{posmsg}", vicio);
-            var result = await synthesizer.SpeakSsmlAsync(ssml);
-
-            //var teste = await synthesizer.SpeakTextAsync(textToSpeech+".ora pois.");
+            await SpeakAzure(spk, textToSpeech);
         }
 
-        public static Task QueueAdd (Action action)
+        public static async Task SpeakGerman(string textToSpeech)
         {
-            if (Speaker != Status.Disabled)
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Schweinsteiger",
+                Voice = "de-DE-Stefan",
+                Diction = ""
+            };
+
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakRussian(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Sputinik",
+                Voice = "ru-RU-Irina",
+                Diction = ""
+            };
+
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakFrench(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Thierry Henry",
+                Voice = "fr-FR-Julie",
+                Diction = ""
+            };
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakArabic(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Insha'Allah",
+                Voice = "ar-EG-Hoda",
+                Diction = ""
+            };
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakItalian(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Mama mia Marcello.",
+                Voice = "it-IT-Cosimo",
+                Diction = ""
+            };
+
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakGreece(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Malaká",
+                Voice = "el-GR-Stefanos",
+                Diction = ""
+            };
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakJapanese(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "Naniiii",
+                Voice = "ja-JP-Ichiro",
+                Diction = ""
+            };
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakChinese(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "wǒ shì bā xī rén",
+                Voice = "zh-CN-Yaoyao",
+                Diction = ""
+            };
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        public static async Task SpeakSpanish(string textToSpeech)
+        {
+            if (!await CheckStatus() || config == null) return;
+
+            Speaker spk = new Speaker()
+            {
+                Alert = "A buenas horas mangas verdes",
+                Voice = "es-MX-Raul",
+                Diction = ""
+            };
+
+            await SpeakAzure(spk, textToSpeech);
+        }
+
+        private static async Task SpeakAzure(ISpeaker speaker, string textToSpeech)
+        {
+            config.SpeechSynthesisVoiceName = speaker.Voice;
+            using var synthesizer = new SpeechSynthesizer(config);
+
+            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", speaker.Voice).Replace("{posmsg}", speaker.Diction).Replace("{alert}", speaker.Alert);
+            var result = await synthesizer.SpeakSsmlAsync(ssml);
+
+            await AutomaticTranslator.Translate(textToSpeech);
+        }
+
+        public static async Task QueueAdd (Func<Task> action)
+        {
+            if (await CheckStatus())
                 lock (Queue)
                     Queue.Add(action);
-
-            return Task.CompletedTask;
         }
 
         public static async void Start()
@@ -102,21 +239,25 @@ namespace WebMatBot
                         await Task.Delay(5000);
                     else
                     {
-                        Task scoped = null;
+                        Func<Task> scoped = null;
 
+                        //get from list
                         lock (Queue)
                         {
                             if (Queue.Count > 0)
                             {
-                                scoped = new Task(Queue[0]);
-                                Queue.Remove(Queue[0]);
+                                scoped = Queue[0];
                             }
                         }
 
+                        //execute and wait
                         if (scoped != null)
                         {
-                            scoped.Start();
-                            scoped.Wait();
+                            await scoped();
+
+                            //update list
+                            lock (Queue)
+                                Queue.Remove(Queue[0]);
                         }
 
                         await Task.Delay(10000);
@@ -127,6 +268,58 @@ namespace WebMatBot
                 }
             } while (true) ;
         }
+
+        public static async Task SpeakTranslate(string cmd)
+        {
+            string msg;
+            Languages? src, trg;
+            if (GetLanguages(cmd, out src, out trg, out msg))
+            {
+                var Target = trg.Value;
+
+                msg = await Translate.TranslateCore(msg, false, Target);
+
+                switch (Target)
+                {
+                    case Languages.ar:
+                        await QueueAdd(async () => await SpeakArabic(msg));
+                        break;
+                    case Languages.de:
+                        await QueueAdd(async () => await SpeakGerman(msg));
+                        break;
+                    case Languages.el:
+                        await QueueAdd(async () => await SpeakGreece(msg));
+                        break;
+                    case Languages.en:
+                        await QueueAdd(async () => await SpeakEnglish(msg));
+                        break;
+                    case Languages.es:
+                        await QueueAdd(async () => await SpeakSpanish(msg));
+                        break;
+                    case Languages.fr:
+                        await QueueAdd(async () => await SpeakFrench(msg));
+                        break;
+                    case Languages.it:
+                        await QueueAdd(async () => await SpeakItalian(msg));
+                        break;
+                    case Languages.ja:
+                        await QueueAdd(async () => await SpeakJapanese(msg));
+                        break;
+                    case Languages.pt:
+                        await QueueAdd(async () => await SpeakPortuga(msg));
+                        break;
+                    case Languages.ru:
+                        await QueueAdd(async () => await SpeakRussian(msg));
+                        break;
+                    case Languages.zh:
+                        await QueueAdd(async () => await SpeakChinese(msg));
+                        break;
+                }
+
+
+            }
+        }
+
 
         private static async Task<bool> CheckStatus()
         {
