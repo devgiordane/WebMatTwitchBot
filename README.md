@@ -16,9 +16,7 @@ Um simples bot para automatizar o chat do seu canal na twitch.
   2 - Copie o codigo mostrado no item anterior e cole no campo oauth, no campo user preencha com o mesmo usuario utilizado anteriormente.<br/>
   B - (removido do código princial) - Caso você deseja utilizar o !speakPt !speakEn entre outros (azure serviços cognitivos) é necessário ir em : www.portal.azure.com, cadastrar-se, e instalar Serviço Cognitivo.<br/>
   C - Caso você deseja utilizar o !speakPt !speakEn (google cloud api text-to-speech) é necessário ir em : https://googleapis.dev/dotnet/Google.Cloud.TextToSpeech.V1/2.0.0/index.html, cadastrar-se, e instalar siga os passos recomendados pelo próprio google.<br/>
-  
-      Depois de Instalado, pegar a key do serviço cognitivo e configurar o Parameters.cs;<br/>
-  
+
 ## Customização
   Você pode customizar os comandos e respostas do bot indo até Commands.cs adicionando um novo item no campo List. (Se você sentir alguma dificuldade consulte itens já inseridos)<br/>
   Você pode customizar os registros em cache indo até Cache.cs. (Vide exemplo entre Cache.cs e Commands.cs)<br/>
