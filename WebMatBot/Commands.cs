@@ -28,20 +28,20 @@ namespace WebMatBot
 
             {"!Translate", async(string text) => await Translate.TranslateText(text,true) },
             {"!SetTranslate",async (string text) => await AutomaticTranslator.Command(text) },
-            {"!SpeakTranslate", async(string text) =>  await Speakers.SpeakTranslate(text)},
+            {"!SpeakTranslate", async(string text) =>  await GoogleSpeakers.SpeakTranslate(text)},
 
-            {"!Speak", async (string text) => await Speakers.QueueAdd(async () => await Speakers.Speak(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakPt",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakPortuga(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakEn",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakEnglish(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakDe",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakGerman(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakRu",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakRussian(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakFr",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakFrench(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakIt",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakItalian(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakAr",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakArabic(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakEl",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakGreece(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakJa",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakJapanese(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakZh",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakChinese(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakEs",async (string text) => await Speakers.QueueAdd(async () => await Speakers.SpeakSpanish(text)) } //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!Speak", async (string text) => await SpeakerCore.QueueAdd(async () => await SpeakerCore.Speak(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakPt",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.pt)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakEn",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.en)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakDe",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.de)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakRu",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ru)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakFr",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.fr)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakIt",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.it)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakAr",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ar)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakEl",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.el)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakJa",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ja)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakZh",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.zh)) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {"!SpeakEs",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.es)) } //to activate spekaer... goes to console and type "!setspeaker true"
         };
 
         private static async Task Projeto()
@@ -81,7 +81,7 @@ namespace WebMatBot
 
         private static async Task Screen()
         {
-            await Speakers.QueueAdd(async () => await Speakers.Speak("Ta lindo essa tela errada..."));
+            await SpeakerCore.QueueAdd(async () => await SpeakerCore.Speak("Ta lindo essa tela errada..."));
         }
 
         private static async Task Exclamacao()

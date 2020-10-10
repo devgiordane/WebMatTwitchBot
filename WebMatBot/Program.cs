@@ -13,7 +13,7 @@ namespace WebMatBot
         static async Task Main(string[] args)
         {
             await Task.Run(() => Core.Start()); // run the core of twitch connection in a new thread
-            await Task.Run(() =>  Speakers.Start());
+            await Task.Run(() =>  SpeakerCore.Start());
             await ListeningNewSettings(); // to set new parameters while running
         }
 
@@ -41,17 +41,17 @@ namespace WebMatBot
                         switch(line.Split(" ")[1])
                         {
                             case "pause":
-                                Speakers.Speaker = Status.Paused;
+                                SpeakerCore.Speaker = Status.Paused;
                                 break;
                             case "play":
                             case "true":
-                                Speakers.Speaker = Status.Enabled;
+                                SpeakerCore.Speaker = Status.Enabled;
                                 break;
                             case "false":
-                                Speakers.Speaker = Status.Disabled;
+                                SpeakerCore.Speaker = Status.Disabled;
                                 break;
                         }
-                        Console.WriteLine("Speaker now is: " + Speakers.Speaker.ToString());
+                        Console.WriteLine("Speaker now is: " + SpeakerCore.Speaker.ToString());
                     }
 
                     Core.Analizer(line);
