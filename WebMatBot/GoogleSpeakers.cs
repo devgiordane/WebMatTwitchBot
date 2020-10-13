@@ -81,15 +81,11 @@ namespace WebMatBot
             using (Stream output = File.Create(cFile))
                 response.AudioContent.WriteTo(output);
 
-            SpeakerCore.ExecutePowerShell($@"Add-Type -AssemblyName PresentationCore;
-            $mediaPlayer = New-Object System.Windows.Media.MediaPlayer;
-            do{{
-            $mediaPlayer.Open(""{cFile}"");
-            $musicaDuracao = $mediaPlayer.NaturalDuration.TimeSpan.TotalMilliseconds;
-            }}
-            until($musicaDuracao)
-            $mediaPlayer.Play();
-            Start-Sleep -Milliseconds $musicaDuracao;");
+            Sounds.RandomSound();
+
+            SpeakerCore.ExecuteMP3File(cFile);
+
+            await AutomaticTranslator.Translate(textToSpeech);
 
         }
 

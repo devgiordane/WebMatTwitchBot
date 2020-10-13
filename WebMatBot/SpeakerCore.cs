@@ -20,6 +20,8 @@ namespace WebMatBot
         {
             if (!await CheckStatus()) return;
 
+            Sounds.RandomSound();
+
             // Command to execute PS  
             ExecutePowerShell($@"Add-Type -AssemblyName System.speech;  
             $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;                           
@@ -52,6 +54,19 @@ namespace WebMatBot
             p.StartInfo.RedirectStandardOutput = true;
             var copyProcess = Process.GetCurrentProcess();
             p.WaitForExit();
+        }
+
+        public static void ExecuteMP3File(string path)
+        {
+            ExecutePowerShell($@"Add-Type -AssemblyName PresentationCore;
+            $mediaPlayer = New-Object System.Windows.Media.MediaPlayer;
+            do{{
+            $mediaPlayer.Open(""{path}"");
+            $musicaDuracao = $mediaPlayer.NaturalDuration.TimeSpan.TotalMilliseconds;
+            }}
+            until($musicaDuracao)
+            $mediaPlayer.Play();
+            Start-Sleep -Milliseconds $musicaDuracao;");
         }
 
         public static async Task QueueAdd (Func<Task> action)
@@ -110,12 +125,6 @@ namespace WebMatBot
             }
             else
                 return true;
-        }
-
-
-        public async Task<bool> CheckTrue()
-        {
-            return true;
         }
     }
 

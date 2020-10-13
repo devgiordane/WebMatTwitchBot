@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WebMatBot
@@ -26,11 +27,15 @@ namespace WebMatBot
 
         }
 
-        public static async Task Respond()
+        public static async Task Respond(string user)
         {
-            foreach(var item in Messages)
-                await Core.Respond(item); // maximo de 500 caracteres por mensagem na twitch
+            foreach (var item in Messages)
+            {
+                await Core.Whisper( user ,item);
+                //await Core.Respond(item); // maximo de 500 caracteres por mensagem na twitch
+            }
 
+            await Core.Respond(user + ", confira a aba de sussurros...");
         }
     }
 }

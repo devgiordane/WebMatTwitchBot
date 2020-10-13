@@ -5,6 +5,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WindowsInput;
 
 namespace WebMatBot
 {
@@ -17,7 +18,7 @@ namespace WebMatBot
             await ListeningNewSettings(); // to set new parameters while running
         }
 
-        private static Task ListeningNewSettings()
+        private static async Task ListeningNewSettings()
         {
             do
             {
@@ -35,10 +36,12 @@ namespace WebMatBot
                         Commands.TetrisLink = line.Split(" ")[1];
                         Console.WriteLine("Tetris link is: " + Commands.TetrisLink);
                     }
-                    line = line.ToLower();
+
+                    
                     if (line.ToLower().Contains("!setspeaker"))
                     {
-                        switch(line.Split(" ")[1])
+                        line = line.ToLower();
+                        switch (line.Split(" ")[1])
                         {
                             case "pause":
                                 SpeakerCore.Speaker = Status.Paused;
@@ -54,7 +57,21 @@ namespace WebMatBot
                         Console.WriteLine("Speaker now is: " + SpeakerCore.Speaker.ToString());
                     }
 
-                    Core.Analizer(line);
+                    if (line.ToLower().Contains("!setscreen"))
+                    {
+                        switch (line.Split(" ")[1])
+                        {
+                            case "true":
+                                Screens.isActive = true;
+                                break;
+                            case "false":
+                                Screens.isActive = false;
+                                break;
+                        }
+                        Console.WriteLine("Speaker now is: " + (Screens.isActive ? "Active" : "Deactivated"));
+                    }
+
+                    await Core.Analizer(line);
                 }
                 catch (Exception except)
                 {

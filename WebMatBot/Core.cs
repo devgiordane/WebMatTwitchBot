@@ -67,15 +67,13 @@ namespace WebMatBot
                     using (var reader = new StreamReader(ms, Encoding.UTF8))
                     {
                         var input = await reader.ReadToEndAsync();
-                        Console.WriteLine(input);
+                        //Console.WriteLine(input);
                         if (await Analizer(input))
                         {
                             Cache.AddToCacheMessage(input);
                         }
                     }
-
                 }
-
             };
         }
 
@@ -89,6 +87,11 @@ namespace WebMatBot
             {
                 Console.WriteLine(except.Message);
             }
+        }
+
+        public static async Task Whisper(string user, string msg)
+        {
+            await Send(@"PRIVMSG #" + Parameters.User + " :/w " + user + " " + msg, CancellationToken.None);
         }
 
         public static async Task<bool> Analizer(string input)
@@ -107,15 +110,19 @@ namespace WebMatBot
                 await Send(@"PRIVMSG #" + Parameters.User + " :/timeout "+ input.Split("!")[0].Replace(":","") +" 1m", CancellationToken.None);
                 return false;
             }
+
             //check all counters and increase if necessary
             Counters.CheckCounter(input);
 
             var words = input.ToLower().Split(" ");
+
+            Console.WriteLine(input);
+
             // verifica comandos
             foreach (var cmd in Commands.List)
             {
                 if (words.Any(q => q.Trim().Replace(":", "").Equals(cmd.Key.ToLower())))
-                    cmd.Value.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1]);
+                    cmd.Action.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1], input.Split("!")[0].Replace(":", ""));
             }
 
             return true;

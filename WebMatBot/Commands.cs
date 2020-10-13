@@ -9,39 +9,46 @@ namespace WebMatBot
     {
         public static string ProjectLink { get; set; }
         public static string TetrisLink { get; set; }
-        
-        public static IDictionary<string, Action<string>> List = new Dictionary<string, Action<string>>()
+
+        public static IList<Command> List = new List<Command>()
         {
-            {"!Projeto" , async (string text) => await Projeto() },
-            {"!Tetris" , async (string text) => await Tetris() },
-            {"!Store" , async (string text) => await Store() },
-            {"!Donate" , async (string text) => await Donate() },
-            {"!DonatePP" , async (string text) => await DonatePP() },
-            {"!Tela" , async (string text) => await Screen() },
-            {"!Pesquisa" , async (string text) => await Pesquisa() },
-            {"!Salve" , async (string text) => await Salve() },
-            {"!GitHub" , async (string text) => await GitHub() },
-            {"!Bot" , async (string text) => await GitHub() },
-            {"!Exclamação" , async (string text) =>  await Exclamacao()},
-            {"!DeiF5" ,async (string text) => await Cache.Respond() },
-            {"!Top", async(string text) => await Counters.Respond("!top","Seu vício de falar top já está acumulado em {n} vezes...") },
+            //{new Command("!Projeto" , async (string text, string user) => await Projeto(), "" )},
+            //{new Command("!Tetris" , async (string text, string user) => await Tetris(), "" ) },
+            {new Command("!Store" , async (string text, string user) => await Store(), "" ) },
+            {new Command("!Donate" , async (string text, string user) => await Donate(), "" ) },
+            {new Command("!DonatePP" , async (string text, string user) => await DonatePP(), "" ) },
+            //{new Command("!Tela" , async (string text, string user) => await Screen(), "" ) },
+            {new Command("!Pesquisa" , async (string text, string user) => await Pesquisa(), "" ) },
+            {new Command("!Salve" , async (string text, string user) => await Salve(), "" ) },
+            {new Command("!GitHub" , async (string text, string user) => await GitHub(), "" ) },
+            //{new Command("!Bot" , async (string text, string user) => await GitHub(), "" ) },
+            {new Command("!Exclamação" , async (string text, string user) =>  await Exclamacao(), "" )},
+            {new Command("!Piada" , (string text, string user) =>  Sounds.Piada(), "" )},
+            {new Command("!DeiF5" ,async (string text, string user) => await Cache.Respond(user), "" ) },
+            {new Command("!Top", async(string text, string user) => await Counters.Respond("!top","Seu vício de falar top já está acumulado em {n} vezes..."), "" ) },
 
-            {"!Translate", async(string text) => await Translate.TranslateText(text,true) },
-            {"!SetTranslate",async (string text) => await AutomaticTranslator.Command(text) },
-            {"!SpeakTranslate", async(string text) =>  await GoogleSpeakers.SpeakTranslate(text)},
+            {new Command("!Translate", async(string text, string user) => await Translate.TranslateText(text,true), "" ) },
+            {new Command("!SetTranslate",async (string text, string user) => await AutomaticTranslator.Command(text), "" ) },
+            {new Command("!SpeakTranslate", async(string text, string user) =>  await GoogleSpeakers.SpeakTranslate(text), "" )},
 
-            {"!Speak", async (string text) => await SpeakerCore.QueueAdd(async () => await SpeakerCore.Speak(text)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakPt",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.pt)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakEn",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.en)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakDe",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.de)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakRu",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ru)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakFr",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.fr)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakIt",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.it)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakAr",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ar)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakEl",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.el)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakJa",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ja)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakZh",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.zh)) }, //to activate spekaer... goes to console and type "!setspeaker true"
-            {"!SpeakEs",async (string text) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.es)) } //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!Speak", async (string text, string user) => await SpeakerCore.QueueAdd(async () => await SpeakerCore.Speak(text)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakPt",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.pt)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakEn",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.en)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakDe",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.de)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakRu",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ru)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakFr",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.fr)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakIt",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.it)) , "" )}, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakAr",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ar)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakEl",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.el)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakJa",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.ja)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakZh",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.zh)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true"
+            {new Command("!SpeakEs",async (string text, string user) => await SpeakerCore.QueueAdd(async () => await GoogleSpeakers.Speak(text, Translate.Languages.es)), "" ) }, //to activate spekaer... goes to console and type "!setspeaker true
+
+            {new Command("!ScreenVS", async (string text, string user) => await Screens.VS(), "" ) }, //to activate screen change... goes to console and type "!setscreen true"
+            {new Command("!ScreenVSCode", async (string text, string user) => await Screens.VSCode(), "" ) }, //to activate screen change... goes to console and type "!setscreen true"
+            {new Command("!ScreenBrowser", async (string text, string user) => await Screens.Browser(), "" ) } //to activate screen change... goes to console and type "!setscreen true"
+
+
         };
 
         private static async Task Projeto()
