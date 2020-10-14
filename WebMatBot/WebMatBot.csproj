@@ -25,6 +25,9 @@
     <None Update="Sounds\cavalo.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Sounds\choque-da-uva.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Sounds\eoq.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
