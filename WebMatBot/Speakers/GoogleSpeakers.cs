@@ -30,17 +30,19 @@ namespace WebMatBot
         };
 
 
-        public static async Task Speak(string textToSpeech, Languages lang)
+        public static async Task Speak(string textToSpeech, string user,Languages lang)
         {
             if (!await SpeakerCore.CheckStatus() || Parameters.GoogleTranslateApiKey == null) return;
 
             Speaker spk = Speakers.FirstOrDefault(q => q.Language == lang);
 
-            if (spk != null) await SpeakGoogle(spk, textToSpeech);
+            if (spk != null) await SpeakGoogle(spk, textToSpeech, user);
         }
 
-        private static async Task SpeakGoogle(ISpeaker speaker, string textToSpeech)
+        private static async Task SpeakGoogle(ISpeaker speaker, string textToSpeech, string user)
         {
+            textToSpeech = textToSpeech.Replace("\"", "\"\"");
+
             // Instantiate a client
             TextToSpeechClient client = TextToSpeechClient.Create();
 
@@ -48,7 +50,7 @@ namespace WebMatBot
             SynthesisInput input = new SynthesisInput
             {
             //Text = textToSpeech,
-                Ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", speaker.Voice).Replace("{posmsg}", speaker.Diction).Replace("{alert}", speaker.Alert),
+                Ssml = File.ReadAllText("Speakers/SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", speaker.Voice).Replace("{posmsg}", speaker.Diction).Replace("{alert}", speaker.Alert),
             };
 
             // Build the voice request, select the language code ("en-US"),
@@ -83,13 +85,15 @@ namespace WebMatBot
 
             Sounds.RandomSound();
 
+            SpeakerCore.PreSpeech(user);
+
             SpeakerCore.ExecuteMP3File(cFile);
 
             await AutomaticTranslator.Translate(textToSpeech);
 
         }
 
-        public static async Task SpeakTranslate(string cmd)
+        public static async Task SpeakTranslate(string cmd, string user)
         {
             string msg;
             Languages? src, trg;
@@ -97,9 +101,9 @@ namespace WebMatBot
             {
                 var Target = trg.Value;
 
-                msg = await Translate.TranslateCore(msg, false, Target);
+                msg = await TranslateCore(msg, false, Target);
 
-                await SpeakerCore.QueueAdd(async () => await Speak(msg, Target));
+                await SpeakerCore.QueueAdd(async () => await Speak(msg, user,Target));
             }
         }
 

@@ -19,7 +19,7 @@ namespace WebMatBot
 
             if (arrayInput.Length >= 2)
             {
-                var msg = arrayInput[0].Split("!")[0] + " "+arrayInput[1].Split("#webmat1")[1];
+                var msg = arrayInput[0].Split("!")[0] + " "+arrayInput[1].Split("#"+ Parameters.User)[1];
                 Messages.Add(msg + ";");
 
                 if (Messages.Count > 10) Messages.RemoveAt(0);
@@ -31,11 +31,11 @@ namespace WebMatBot
         {
             foreach (var item in Messages)
             {
-                await Core.Whisper( user ,item);
+                await Engine.Whisper( user ,item);
                 //await Core.Respond(item); // maximo de 500 caracteres por mensagem na twitch
             }
 
-            await Core.Respond(user + ", confira a aba de sussurros...");
+            await Engine.Respond(user + ", confira a aba de sussurros...");
         }
     }
 }

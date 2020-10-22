@@ -27,28 +27,33 @@ namespace WebMatBot
             new Speaker(){ Alert = "wǒ shì bā xī rén", Voice = "zh-CN-Yaoyao", Diction = "", Language=Languages.zh, Accent = "cmn-CN"},
         };
 
-        public static async Task Speak(string textToSpeech, Languages lang)
+        public static async Task Speak(string textToSpeech, string user,Languages lang)
         {
             if (!await SpeakerCore.CheckStatus() || config == null) return;
 
             Speaker spk = Speakers.FirstOrDefault(q => q.Language == lang);
 
-            if (spk != null) await SpeakAzure(spk, textToSpeech);
+            if (spk != null) await SpeakAzure(spk, textToSpeech, user);
         }
 
 
-        private static async Task SpeakAzure(ISpeaker speaker, string textToSpeech)
+        private static async Task SpeakAzure(ISpeaker speaker, string textToSpeech, string user)
         {
+            textToSpeech = textToSpeech.Replace("\"", "\"\"");
+
             config.SpeechSynthesisVoiceName = speaker.Voice;
             using var synthesizer = new SpeechSynthesizer(config);
 
-            var ssml = File.ReadAllText("SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", speaker.Voice).Replace("{posmsg}", speaker.Diction).Replace("{alert}", speaker.Alert);
+            var ssml = File.ReadAllText("Speakers/SSML.xml").Replace("{text}", textToSpeech).Replace("{voice}", speaker.Voice).Replace("{posmsg}", speaker.Diction).Replace("{alert}", speaker.Alert);
+
+            SpeakerCore.PreSpeech(user);
+
             var result = await synthesizer.SpeakSsmlAsync(ssml);
 
             await AutomaticTranslator.Translate(textToSpeech);
         }
 
-        public static async Task SpeakTranslate(string cmd)
+        public static async Task SpeakTranslate(string cmd, string user)
         {
             string msg;
             Languages? src, trg;
@@ -58,7 +63,7 @@ namespace WebMatBot
 
                 msg = await TranslateCore(msg, false, Target);
 
-                await SpeakerCore.QueueAdd(async () => await Speak(msg, Target));
+                await SpeakerCore.QueueAdd(async () => await Speak(msg, user,Target));
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using F23.StringSimilarity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace WebMatBot
 {
-    public static class Core
+    public static class Engine
     {
         private static ClientWebSocket webSocket { get; set; }
 
         //all words in lowercase
-        private static List<string> badWords = new List<string> { "mongoloide","mongolóide","mongo","pinto", "buceta", "toma no cu", "tomar no cu" };
+        private static List<string> badWords = new List<string> { "mongoloide","mongolóide","mongol","pinto", "buceta", "toma no cu", "tomar no cu" };
 
         public static async void Start()
         {
@@ -114,18 +115,93 @@ namespace WebMatBot
             //check all counters and increase if necessary
             Counters.CheckCounter(input);
 
-            var words = input.ToLower().Split(" ");
+            await CheckCommand(input);
 
             Console.WriteLine(input);
 
+            return true;
+        }
+
+        private static async Task CheckCommand(string input)
+        {
+            var words = input.ToLower().Split(" ");
+            Command command = null;
+            bool isDone = false;
+
             // verifica comandos
-            foreach (var cmd in Commands.List)
+            for (int i = 0; i< Commands.List.Count() && !isDone;  i++)
             {
-                if (words.Any(q => q.Trim().Replace(":", "").Equals(cmd.Key.ToLower())))
-                    cmd.Action.Invoke(input.ToLower().Split(cmd.Key.ToLower())[1], input.Split("!")[0].Replace(":", ""));
+                if (words.Any(q => q.Trim().Replace(":", "").Equals(Commands.List[i].Key.ToLower())))
+                {
+                    command = Commands.List[i];
+                    isDone = true;
+                } 
             }
 
-            return true;
+            if (isDone)
+            {
+                if (input.Length > 550)
+                {
+                    await Respond("Sua Mensagem contém muitos caracteres e não será repassada ao nosso bot!");
+                    return;
+                }
+                else
+                {
+                    command.Action.Invoke(input.ToLower().Split(command.Key.ToLower())[1], input.Split("!")[0].Replace(":", ""));
+                }
+            }
+            else if (words.Length >= 4 && words[3].StartsWith(":!"))
+            {
+                await CommandCorrector(input, words[3].Replace(":", ""));
+            }
+            
+        }
+
+        private static async Task CommandCorrector(string input, string command)
+        {
+            // def variables
+            IDictionary<Command ,double> MatchRate = new Dictionary<Command, double>();
+            var Match = new NormalizedLevenshtein();
+
+            // filling array with matching rate
+            for (int i = 0; i < Commands.List.Count; i++)
+                MatchRate.Add(Commands.List[i], Match.Distance(command, Commands.List[i].Key));
+
+            //is there some rate lower than 35%
+            if (!MatchRate.Any(q => q.Value <= 0.43d))
+            {
+                await Respond("@" + input.ToLower().Split("!")[0].Replace(":", "") + " , Não entendi o seu comando, tente !Exclamação para obter a lista de todos os comandos...");
+                return;
+            }
+            else
+            {
+                //get the minimum match rate (closest command)
+               var minimum = MatchRate.Min(q=>q.Value);
+
+                var arrayMinimum = MatchRate.Where(q => q.Value == minimum);
+
+                if (arrayMinimum.Count() == 1)
+                {
+                    var Tinput = input.ToLower().Split(command)[1];
+                    var Tuser = input.Split("!")[0].Replace(":", "");
+
+                    await Respond("@" + input.ToLower().Split("!")[0].Replace(":", "") + " , Seu commando foi corrigido para "+ arrayMinimum.ElementAt(0).Key.Key + ", tente !Exclamação para obter a lista de todos os comandos...");
+
+                    arrayMinimum.ElementAt(0).Key.Action.Invoke(Tinput,Tuser);
+                }
+                else
+                {
+                    string text = "@" + input.ToLower().Split("!")[0].Replace(":", "") + " , Não entendi o seu comando, não seria ";
+                    foreach(var item in arrayMinimum)
+                    {
+                        text += item.Key.Key  + " ou ";
+                    }
+
+                    text += "tente !Exclamação para ver todos os comandos...";
+
+                    await Respond(text);
+                }
+            }
         }
     }
 }

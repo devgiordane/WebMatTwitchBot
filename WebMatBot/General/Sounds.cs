@@ -9,8 +9,13 @@ namespace WebMatBot
 {
     public class Sounds
     {
+        public static bool TrollisActive { get; set; } = true;
+
         public static void RandomSound()
         {
+            if (!CheckStatus())
+                return;
+
             Random rdm = new Random();
             var files = GetFiles();
 
@@ -18,6 +23,11 @@ namespace WebMatBot
 
             SpeakerCore.ExecuteMP3File(files[index]);
             //Task.Delay(500);
+        }
+
+        public static bool CheckStatus()
+        {
+            return TrollisActive;
         }
 
         public static string[] GetFiles()
@@ -34,6 +44,13 @@ namespace WebMatBot
         {
             var files = GetFiles();
             var piada = files.Where(q=>q.Contains("rimshot.mp3")).FirstOrDefault();
+            if (piada != null) SpeakerCore.ExecuteMP3File(piada);
+        }
+
+        public static void Clap()
+        {
+            var files = GetFiles();
+            var piada = files.Where(q => q.Contains("aplausos.mp3")).FirstOrDefault();
             if (piada != null) SpeakerCore.ExecuteMP3File(piada);
         }
 

@@ -32,12 +32,12 @@ namespace WebMatBot
 
             var response = await client.TranslateTextAsync(
                 text: textToTranslate,
-                targetLanguage: Trg.ToString(),  // Russian
-                sourceLanguage: (Src == null) ? null : Src.ToString());  // English
+                targetLanguage: Trg.ToString(),  
+                sourceLanguage: (Src == null) ? null : Src.ToString());  
 
             Console.WriteLine(response.TranslatedText);
 
-            if (respond) await Core.Respond(response.TranslatedText);
+            if (respond) await Engine.Respond(response.TranslatedText);
 
             return response.TranslatedText;
         }

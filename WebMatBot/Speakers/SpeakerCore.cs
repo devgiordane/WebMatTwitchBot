@@ -9,22 +9,29 @@ using static WebMatBot.Translate;
 
 namespace WebMatBot
 {
-    class SpeakerCore
+    public class SpeakerCore
     {
         //public static bool Speaker { get; set; } = false;
         public static Status Speaker { get; set; } = Status.Disabled;
 
+        public static int TimeSleeping { get; set; } = 0; // em segundos
+
         private static IList<Func<Task>> Queue = new List<Func<Task>>();
 
-        public static async Task Speak(string textToSpeech, bool wait = true)
+        public static async Task Speak(string textToSpeech, string user,bool wait = true)
         {
             if (!await CheckStatus()) return;
 
             Sounds.RandomSound();
 
+            SpeakerCore.PreSpeech(user);
+
+            textToSpeech = textToSpeech.Replace("\"", "\"\"");
+
             // Command to execute PS  
             ExecutePowerShell($@"Add-Type -AssemblyName System.speech;  
-            $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;                           
+            $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;
+            $speak.Rate = -3;
             $speak.Speak(""{textToSpeech}"");"); // Embedd text  
 
         }
@@ -69,6 +76,16 @@ namespace WebMatBot
             Start-Sleep -Milliseconds $musicaDuracao;");
         }
 
+        public static void PreSpeech(string user)
+        {
+            string text = user + " diz: ";
+
+            // Command to execute PS  
+            ExecutePowerShell($@"Add-Type -AssemblyName System.speech;  
+            $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;
+            $speak.Speak(""{text}"");"); // Embedd text  
+        }
+
         public static async Task QueueAdd (Func<Task> action)
         {
             if (await CheckStatus())
@@ -83,7 +100,7 @@ namespace WebMatBot
                 try
                 {
                     if (Speaker == Status.Disabled || Speaker == Status.Paused)
-                        await Task.Delay(5000);
+                        await Task.Delay(2000);
                     else
                     {
                         Func<Task> scoped = null;
@@ -107,7 +124,7 @@ namespace WebMatBot
                                 Queue.Remove(Queue[0]);
                         }
 
-                        await Task.Delay(10000);
+                        await Task.Delay(TimeSleeping*1000);
                     }
                 }catch(Exception excpt)
                 {
@@ -120,7 +137,7 @@ namespace WebMatBot
         {
             if (Speaker == Status.Disabled)
             {
-                await Core.Respond("O Speaker está off... peça o streamer para aciona-lo...");
+                await Engine.Respond("O Speaker está off... peça o streamer para aciona-lo...");
                 return false;
             }
             else

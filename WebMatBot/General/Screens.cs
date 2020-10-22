@@ -22,7 +22,6 @@ namespace WebMatBot
 
             return ;
         }
-
         public static async Task Browser()
         {
 
@@ -49,11 +48,24 @@ namespace WebMatBot
 
             return ;
         }
+        public static async Task Kitchen()
+        {
+
+            if (!await CheckStatus())
+                return;
+
+            InputSimulator input = new InputSimulator();
+            input.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.CONTROL);
+            input.Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.F6);
+            input.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
+
+            return;
+        }
 
         private static async Task<bool> CheckStatus()
         {
             if (!isActive)
-                await Core.Respond("A mudança de tela está desativada, peça o streamer para ativá-la.");
+                await Engine.Respond("A mudança de tela está desativada, peça o streamer para ativá-la.");
 
             return isActive;
         }

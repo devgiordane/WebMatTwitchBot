@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="F23.StringSimilarity" Version="3.1.0" />
     <PackageReference Include="Google.Cloud.TextToSpeech.V1" Version="2.0.0" />
     <PackageReference Include="Google.Cloud.Translation.V2" Version="2.0.0" />
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
@@ -14,6 +15,9 @@
 
   <ItemGroup>
     <None Update="Sounds\ajuda-o-maluco.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\aplausos.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Sounds\batida-de-porta-troll.mp3">
@@ -64,7 +68,7 @@
     <None Update="Sounds\zach.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SSML.xml">
+    <None Update="Speakers\SSML.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
