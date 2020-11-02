@@ -105,6 +105,10 @@ namespace WebMatBot
 
                 await SpeakerCore.QueueAdd(async () => await Speak(msg, user,Target));
             }
+            else
+            {
+                await Engine.CommandCorrector(cmd,"!SpeakTranslate", user, true);
+            }
         }
 
     }

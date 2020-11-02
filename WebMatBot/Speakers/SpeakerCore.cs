@@ -24,7 +24,7 @@ namespace WebMatBot
 
             Sounds.RandomSound();
 
-            SpeakerCore.PreSpeech(user);
+            PreSpeech(user);
 
             textToSpeech = textToSpeech.Replace("\"", "\"\"");
 
@@ -34,6 +34,7 @@ namespace WebMatBot
             $speak.Rate = -3;
             $speak.Speak(""{textToSpeech}"");"); // Embedd text  
 
+            await AutomaticTranslator.Translate(textToSpeech);
         }
 
         public static void ExecutePowerShell(string command)

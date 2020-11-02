@@ -12,8 +12,8 @@ namespace WebMatBot
 {
     public class AutomaticMessages
     {
-        public static DateTime LastMessage { get; set; } = DateTime.Now.AddMinutes(-1);
-        private static TimeSpan SpaceBetweenMessages = new TimeSpan(0,20,0);
+        public static DateTime LastMessage { get; set; } = DateTime.Now.AddMinutes(-5);
+        private static TimeSpan SpaceBetweenMessages = new TimeSpan(0,30,0);
 
         private static List<ScheduledMessage> Queue = new List<ScheduledMessage>();
 
@@ -25,6 +25,7 @@ namespace WebMatBot
 
             lock (Queue)
             {
+                Queue.Add(DrinkWater(DateTime.Now));
                 Queue.Add(Discord(DateTime.Now));
                 Queue.Add(Youtube(DateTime.Now));
                 Queue.Add(GitHub(DateTime.Now));

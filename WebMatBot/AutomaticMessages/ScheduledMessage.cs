@@ -39,8 +39,8 @@ namespace WebMatBot
 
             }, 
                 new TimeSpan(0, 45, 0), //
-                "Você também pode participar do nosso discord... "+
-                "                Join us on Discord..." + StreamerDefault.Discord, 
+                "Você também pode participar do nosso discord... // "+
+                "                Join us on Discord... " + StreamerDefault.Discord, 
                 MessageType.Discord);
 
         public static ScheduledMessage Youtube(DateTime date) => 
@@ -59,8 +59,8 @@ namespace WebMatBot
 
             }, 
                 new TimeSpan(0, 45, 0),
-                "Confira o nosso canal no Youtube... " +
-                "                We are also on YouTube..." + StreamerDefault.Youtube,
+                "Confira o nosso canal no Youtube... // " +
+                "                We are also on YouTube... " + StreamerDefault.Youtube,
                 MessageType.YouTube);
 
         public static ScheduledMessage GitHub(DateTime date) =>
@@ -79,8 +79,8 @@ namespace WebMatBot
 
             },
                 new TimeSpan(0, 45, 0),
-                "O nosso bot, todo em C#, está disponível no GitHub... " +
-                "                Check our chat bot on GitHub..." + StreamerDefault.GitHub,
+                "O nosso bot, todo em C#, está disponível no GitHub... // " +
+                "                Check our chat bot on GitHub... " + StreamerDefault.GitHub,
                 MessageType.GitHub);
 
         public static ScheduledMessage Donate(DateTime date) =>
@@ -99,8 +99,8 @@ namespace WebMatBot
 
             },
                 new TimeSpan(0, 45, 0),
-                "Sinta-se livre para nos apoiar financeiramente... " +
-                "                Feel free helping us..." + StreamerDefault.PayPal + " " + StreamerDefault.PicPay,
+                "Sinta-se livre para nos apoiar financeiramente... // " +
+                "                Feel free helping us... " + StreamerDefault.PayPal + " " + StreamerDefault.PicPay,
                 MessageType.Donate);
 
         public static ScheduledMessage Form(DateTime date) =>
@@ -119,9 +119,29 @@ namespace WebMatBot
 
             },
                 new TimeSpan(0, 45, 0),
-                "Temos uma pesquisa para conhecer mais o nosso chat... " +
-                "                Let me know more about you..." + StreamerDefault.Form,
+                "Temos uma pesquisa para conhecer mais o nosso chat... // " +
+                "                Let me know more about you... " + StreamerDefault.Form,
                 MessageType.Form);
+
+        public static ScheduledMessage DrinkWater(DateTime date) =>
+            new ScheduledMessage(date, async (ScheduledMessage schM) =>
+            {
+                if (DateTime.Now >= AutomaticMessages.LastMessage)
+                {
+                    //envia a mensagem
+                    await Engine.Respond(schM.Message);
+
+                    AutomaticMessages.LastMessage = DateTime.Now;
+
+                    AutomaticMessages.RemoveQueue(schM.TypeInfo);
+                    AutomaticMessages.AddQueue(DrinkWater(DateTime.Now.AddMinutes(schM.WaitingTime.TotalMinutes)));
+                }
+
+            },
+                new TimeSpan(0, 7, 30),
+                "Não se esqueça de beber Vodka/Água... // " +
+                "                Remember to drink Vodka/Water... ",
+                MessageType.Water);
 
         public enum MessageType
         {
@@ -130,6 +150,7 @@ namespace WebMatBot
             Donate,
             GitHub,
             Form,
+            Water,
         }
     }
 }

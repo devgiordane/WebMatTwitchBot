@@ -17,6 +17,7 @@ namespace WebMatBot
             await Task.Run(() => WebMatBot.Engine.Start()); // run the core of twitch connection in a new thread
             await Task.Run(() => SpeakerCore.Start());
             await Task.Run(() => AutomaticMessages.Start());
+            await Task.Run(() => Lights.Light.Start());
             await ListeningNewSettings(); // to set new parameters while running
         }
 

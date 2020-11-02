@@ -11,6 +11,7 @@
     <PackageReference Include="Google.Cloud.Translation.V2" Version="2.0.0" />
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
     <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.13.0" />
+    <PackageReference Include="YeelightAPI" Version="1.9.0" />
   </ItemGroup>
 
   <ItemGroup>

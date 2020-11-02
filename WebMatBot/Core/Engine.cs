@@ -135,11 +135,12 @@ namespace WebMatBot
                 {
                     command = Commands.List[i];
                     isDone = true;
-                } 
+                }
             }
 
             if (isDone)
             {
+                //limite de caracteres
                 if (input.Length > 550)
                 {
                     await Respond("Sua Mensagem contém muitos caracteres e não será repassada ao nosso bot!");
@@ -157,7 +158,7 @@ namespace WebMatBot
             
         }
 
-        private static async Task CommandCorrector(string input, string command)
+        public static async Task CommandCorrector(string input, string command, string user = null,bool shouldBeExact =false)
         {
             // def variables
             IDictionary<Command ,double> MatchRate = new Dictionary<Command, double>();
@@ -168,7 +169,7 @@ namespace WebMatBot
                 MatchRate.Add(Commands.List[i], Match.Distance(command, Commands.List[i].Key));
 
             //is there some rate lower than 35%
-            if (!MatchRate.Any(q => q.Value <= 0.43d))
+            if (!MatchRate.Any(q => q.Value <= 0.51d))
             {
                 await Respond("@" + input.ToLower().Split("!")[0].Replace(":", "") + " , Não entendi o seu comando, tente !Exclamação para obter a lista de todos os comandos...");
                 return;
@@ -176,18 +177,26 @@ namespace WebMatBot
             else
             {
                 //get the minimum match rate (closest command)
-               var minimum = MatchRate.Min(q=>q.Value);
+                var minimum = MatchRate.Min(q=>q.Value);
 
                 var arrayMinimum = MatchRate.Where(q => q.Value == minimum);
 
                 if (arrayMinimum.Count() == 1)
                 {
-                    var Tinput = input.ToLower().Split(command)[1];
-                    var Tuser = input.Split("!")[0].Replace(":", "");
+                    if (shouldBeExact)
+                    {
+                        await Respond("@" + user + " , O comando " + command + " está incorreto; " + arrayMinimum.ElementAt(0).Key.Description);
+                    }
+                    else
+                    {
+                        var Tinput = input.ToLower().Split(command)[1];
+                        var Tuser = input.ToLower().Split("!")[0].Replace(":", "");
 
-                    await Respond("@" + input.ToLower().Split("!")[0].Replace(":", "") + " , Seu commando foi corrigido para "+ arrayMinimum.ElementAt(0).Key.Key + ", tente !Exclamação para obter a lista de todos os comandos...");
+                        await Respond("@" + Tuser + " , Seu commando foi corrigido para " + arrayMinimum.ElementAt(0).Key.Key + ", tente !Exclamação para obter a lista de todos os comandos...");
 
-                    arrayMinimum.ElementAt(0).Key.Action.Invoke(Tinput,Tuser);
+                        arrayMinimum.ElementAt(0).Key.Action.Invoke(Tinput, Tuser);
+                    }
+                    
                 }
                 else
                 {
