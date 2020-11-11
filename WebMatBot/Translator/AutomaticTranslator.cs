@@ -36,7 +36,7 @@ namespace WebMatBot
                     status = Status.Enabled;
                     Target = trg.Value;
 
-                    await Engine.Respond("O tradutor está automatico para " + Target.ToString() + "...");
+                    await IrcEngine.Respond("O tradutor está automatico para " + Target.ToString() + "...");
                 }
             }
         }

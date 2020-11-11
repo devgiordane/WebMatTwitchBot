@@ -29,7 +29,7 @@ namespace WebMatBot
                 if (DateTime.Now >= AutomaticMessages.LastMessage)
                 {
                     //envia a mensagem
-                    await Engine.Respond(schM.Message);
+                    await IrcEngine.Respond(schM.Message);
 
                     AutomaticMessages.LastMessage = DateTime.Now;
 
@@ -49,7 +49,7 @@ namespace WebMatBot
                 if (DateTime.Now >= AutomaticMessages.LastMessage)
                 {
                     //envia a mensagem
-                    await Engine.Respond(schM.Message);
+                    await IrcEngine.Respond(schM.Message);
 
                     AutomaticMessages.LastMessage = DateTime.Now;
 
@@ -69,7 +69,7 @@ namespace WebMatBot
                 if (DateTime.Now >= AutomaticMessages.LastMessage)
                 {
                     //envia a mensagem
-                    await Engine.Respond(schM.Message);
+                    await IrcEngine.Respond(schM.Message);
 
                     AutomaticMessages.LastMessage = DateTime.Now;
 
@@ -89,7 +89,7 @@ namespace WebMatBot
                 if (DateTime.Now >= AutomaticMessages.LastMessage)
                 {
                     //envia a mensagem
-                    await Engine.Respond(schM.Message);
+                    await IrcEngine.Respond(schM.Message);
 
                     AutomaticMessages.LastMessage = DateTime.Now;
 
@@ -109,7 +109,7 @@ namespace WebMatBot
                 if (DateTime.Now >= AutomaticMessages.LastMessage)
                 {
                     //envia a mensagem
-                    await Engine.Respond(schM.Message);
+                    await IrcEngine.Respond(schM.Message);
 
                     AutomaticMessages.LastMessage = DateTime.Now;
 
@@ -129,7 +129,7 @@ namespace WebMatBot
                 if (DateTime.Now >= AutomaticMessages.LastMessage)
                 {
                     //envia a mensagem
-                    await Engine.Respond(schM.Message);
+                    await IrcEngine.Respond(schM.Message);
 
                     AutomaticMessages.LastMessage = DateTime.Now;
 

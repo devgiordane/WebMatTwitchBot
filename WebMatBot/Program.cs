@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebMatBot.Core;
 using WindowsInput;
 
 namespace WebMatBot
@@ -14,10 +15,11 @@ namespace WebMatBot
     {
         static async Task Main(string[] args)
         {
-            await Task.Run(() => WebMatBot.Engine.Start()); // run the core of twitch connection in a new thread
-            await Task.Run(() => SpeakerCore.Start());
-            await Task.Run(() => AutomaticMessages.Start());
-            await Task.Run(() => Lights.Light.Start());
+            Task.Run(() => WebMatBot.IrcEngine.Start()); // run the core of twitch connection in a new thread
+            Task.Run(() => TasksQueueOutput.Start());
+            Task.Run(() => AutomaticMessages.Start());
+            Task.Run(() => Lights.Light.Start());
+            Task.Run(() => PubSubEngine.Start());
             await ListeningNewSettings(); // to set new parameters while running
         }
 
@@ -25,7 +27,7 @@ namespace WebMatBot
         {
             do
             {
-                try
+                try 
                 {
                     var line = Console.ReadLine();
                     if (line.ToLower().Contains("!setproject"))
@@ -40,24 +42,23 @@ namespace WebMatBot
                         Console.WriteLine("Tetris link is: " + Commands.TetrisLink);
                     }
 
-                    
                     if (line.ToLower().Contains("!setspeaker"))
                     {
                         line = line.ToLower();
                         switch (line.Split(" ")[1])
                         {
                             case "pause":
-                                SpeakerCore.Speaker = Status.Paused;
+                                SpeakerCore.Status = Status.Paused;
                                 break;
                             case "play":
                             case "true":
-                                SpeakerCore.Speaker = Status.Enabled;
+                                SpeakerCore.Status = Status.Enabled;
                                 break;
                             case "false":
-                                SpeakerCore.Speaker = Status.Disabled;
+                                SpeakerCore.Status = Status.Disabled;
                                 break;
                         }
-                        Console.WriteLine("Speaker now is: " + SpeakerCore.Speaker.ToString());
+                        Console.WriteLine("Speaker now is: " + SpeakerCore.Status.ToString());
                     }
 
                     if (line.ToLower().Contains("!setscreen"))
@@ -91,16 +92,16 @@ namespace WebMatBot
                     if (line.ToLower().Contains("!setspeaktime"))
                     {
                         line = line.ToLower();
-                        int newTime = SpeakerCore.TimeSleeping;
+                        int newTime = TasksQueueOutput.TimeSleeping;
 
                         int.TryParse(line.Split(" ")[1], out newTime);
 
-                        SpeakerCore.TimeSleeping = newTime;
+                        TasksQueueOutput.TimeSleeping = newTime;
                                 
-                        Console.WriteLine("Speaker now has time delay: " + SpeakerCore.TimeSleeping.ToString() + " seconds");
+                        Console.WriteLine("Speaker now has time delay: " + TasksQueueOutput.TimeSleeping.ToString() + " seconds");
                     }
 
-                    await WebMatBot.Engine.Analizer(line);
+                    await WebMatBot.IrcEngine.Analizer(":"+ Parameters.User+"!"+ Parameters.User + "@"+ Parameters.User + ".tmi.twitch.tv PRIVMSG " + line);
                 }
                 catch (Exception except)
                 {

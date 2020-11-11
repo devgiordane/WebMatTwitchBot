@@ -8,7 +8,7 @@ namespace WebMatBot
 {
     public class Screens
     {
-        public static bool isActive { get; set; } = false;
+        public static bool isActive { get; set; } = true;
 
         public static async Task VSCode()
         {
@@ -65,7 +65,7 @@ namespace WebMatBot
         private static async Task<bool> CheckStatus()
         {
             if (!isActive)
-                await Engine.Respond("A mudança de tela está desativada, peça o streamer para ativá-la.");
+                await IrcEngine.Respond("A mudança de tela está desativada, peça o streamer para ativá-la.");
 
             return isActive;
         }

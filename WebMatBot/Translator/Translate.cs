@@ -37,7 +37,7 @@ namespace WebMatBot
 
             Console.WriteLine(response.TranslatedText);
 
-            if (respond) await Engine.Respond(response.TranslatedText);
+            if (respond) await IrcEngine.Respond(response.TranslatedText);
 
             return response.TranslatedText;
         }

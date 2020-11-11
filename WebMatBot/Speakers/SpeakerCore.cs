@@ -12,17 +12,13 @@ namespace WebMatBot
     public class SpeakerCore
     {
         //public static bool Speaker { get; set; } = false;
-        public static Status Speaker { get; set; } = Status.Disabled;
+        public static Status Status { get; set; } = Status.Enabled;
 
-        public static int TimeSleeping { get; set; } = 0; // em segundos
-
-        private static IList<Func<Task>> Queue = new List<Func<Task>>();
-
-        public static async Task Speak(string textToSpeech, string user,bool wait = true)
+        public static async Task Speak(string textToSpeech, string user,bool wait = true, string speakRate = "0")
         {
             if (!await CheckStatus()) return;
 
-            Sounds.RandomSound();
+            Sounds.RandomTrollSound();
 
             PreSpeech(user);
 
@@ -31,7 +27,7 @@ namespace WebMatBot
             // Command to execute PS  
             ExecutePowerShell($@"Add-Type -AssemblyName System.speech;  
             $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer;
-            $speak.Rate = -3;
+            $speak.Rate = {speakRate};
             $speak.Speak(""{textToSpeech}"");"); // Embedd text  
 
             await AutomaticTranslator.Translate(textToSpeech);
@@ -87,63 +83,17 @@ namespace WebMatBot
             $speak.Speak(""{text}"");"); // Embedd text  
         }
 
-        public static async Task QueueAdd (Func<Task> action)
-        {
-            if (await CheckStatus())
-                lock (Queue)
-                    Queue.Add(action);
-        }
-
-        public static async void Start()
-        {
-            do
-            {
-                try
-                {
-                    if (Speaker == Status.Disabled || Speaker == Status.Paused)
-                        await Task.Delay(2000);
-                    else
-                    {
-                        Func<Task> scoped = null;
-
-                        //get from list
-                        lock (Queue)
-                        {
-                            if (Queue.Count > 0)
-                            {
-                                scoped = Queue[0];
-                            }
-                        }
-
-                        //execute and wait
-                        if (scoped != null)
-                        {
-                            await scoped();
-
-                            //update list
-                            lock (Queue)
-                                Queue.Remove(Queue[0]);
-                        }
-
-                        await Task.Delay(TimeSleeping*1000);
-                    }
-                }catch(Exception excpt)
-                {
-                    Console.WriteLine(excpt.Message) ;
-                }
-            } while (true) ;
-        }
-
         public static async Task<bool> CheckStatus()
         {
-            if (Speaker == Status.Disabled)
+            if (SpeakerCore.Status == Status.Disabled)
             {
-                await Engine.Respond("O Speaker está off... peça o streamer para aciona-lo...");
+                await IrcEngine.Respond("O Speaker está off... peça o streamer para aciona-lo...");
                 return false;
             }
             else
                 return true;
         }
+
     }
 
     public enum Status

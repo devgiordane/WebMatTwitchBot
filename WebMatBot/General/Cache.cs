@@ -31,11 +31,11 @@ namespace WebMatBot
         {
             foreach (var item in Messages)
             {
-                await Engine.Whisper( user ,item);
+                await IrcEngine.Whisper( user ,item);
                 //await Core.Respond(item); // maximo de 500 caracteres por mensagem na twitch
             }
 
-            await Engine.Respond(user + ", confira a aba de sussurros...");
+            await IrcEngine.Respond(user + ", confira a aba de sussurros...");
         }
     }
 }

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebMatBot.Core;
 using static WebMatBot.Translate;
 
 namespace WebMatBot
@@ -83,7 +84,7 @@ namespace WebMatBot
             using (Stream output = File.Create(cFile))
                 response.AudioContent.WriteTo(output);
 
-            Sounds.RandomSound();
+            Sounds.RandomTrollSound();
 
             SpeakerCore.PreSpeech(user);
 
@@ -103,11 +104,11 @@ namespace WebMatBot
 
                 msg = await TranslateCore(msg, false, Target);
 
-                await SpeakerCore.QueueAdd(async () => await Speak(msg, user,Target));
+                await TasksQueueOutput.QueueAddSpeech(async () => await Speak(msg, user,Target));
             }
             else
             {
-                await Engine.CommandCorrector(cmd,"!SpeakTranslate", user, true);
+                await IrcEngine.CommandCorrector(cmd,"!SpeakTranslate", user, true);
             }
         }
 

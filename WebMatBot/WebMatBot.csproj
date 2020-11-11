@@ -15,63 +15,94 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sounds\ajuda-o-maluco.mp3">
+    <None Update="Sounds\Party\baby-shark.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\aplausos.mp3">
+    <None Update="Sounds\Party\naruto-trap.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\batida-de-porta-troll.mp3">
+    <None Update="Sounds\Party\sbtrapvinebycarb0n.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\birl.mp3">
+    <None Update="Sounds\Party\trap_android.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\cavalo.mp3">
+    <None Update="Sounds\General\xandao.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\choque-da-uva.mp3">
+    <None Update="Sounds\Party\yoshi_gets_lit_trap_remixgrabfrom.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\eoq.mp3">
+    <None Update="Sounds\Troll\ajuda-o-maluco.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\failhorn.mp3">
+    <None Update="Sounds\General\aplausos.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\faustao-errou.mp3">
+    <None Update="Sounds\Troll\batida-de-porta-troll.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\hadouken.mp3">
+    <None Update="Sounds\Troll\birl.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\kasino.mp3">
+    <None Update="Sounds\Troll\cavalo.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\olha_a_pedra.mp3">
+    <None Update="Sounds\Troll\choque-da-uva.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\quack.mp3">
+    <None Update="Sounds\Troll\eoq.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\que-ota.mp3">
+    <None Update="Sounds\Troll\failhorn.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\rimshot.mp3">
+    <None Update="Sounds\Troll\faustao-errou.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\xandao.mp3">
+    <None Update="Sounds\Troll\hadouken.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\xaropinho.mp3">
+    <None Update="Sounds\Troll\kasino.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sounds\zach.mp3">
+    <None Update="Sounds\Troll\metalgearsolid.swf.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\olha_a_pedra.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\quack.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\que-ota.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\General\rimshot.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\tafareeel.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\vergonha.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\xandao.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\xaropinho.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\Troll\zach.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Speakers\SSML.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Sounds\Party\" />
   </ItemGroup>
 
 </Project>

@@ -9,15 +9,15 @@ namespace WebMatBot
 {
     public class Sounds
     {
-        public static bool TrollisActive { get; set; } = true;
+        public static bool TrollisActive { get; set; } = false;
 
-        public static void RandomSound()
+        public static void RandomTrollSound()
         {
             if (!CheckStatus())
                 return;
 
             Random rdm = new Random();
-            var files = GetFiles();
+            var files = GetTrollFiles();
 
             var index = rdm.Next(files.Length);
 
@@ -30,9 +30,27 @@ namespace WebMatBot
             return TrollisActive;
         }
 
-        public static string[] GetFiles()
+        public static string[] GetTrollFiles()
         {
-            var targetDirectory = @Directory.GetCurrentDirectory() + @"\Sounds";
+            var targetDirectory = @Directory.GetCurrentDirectory() + @"\Sounds\Troll";
+
+            // Process the list of files found in the directory.
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            return fileEntries;
+        }
+
+        public static string[] GetGeneralFiles()
+        {
+            var targetDirectory = @Directory.GetCurrentDirectory() + @"\Sounds\General";
+
+            // Process the list of files found in the directory.
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            return fileEntries;
+        }
+
+        public static string[] GetPartyFiles()
+        {
+            var targetDirectory = @Directory.GetCurrentDirectory() + @"\Sounds\Party";
 
             // Process the list of files found in the directory.
             string[] fileEntries = Directory.GetFiles(targetDirectory);
@@ -42,16 +60,33 @@ namespace WebMatBot
 
         public static void Piada()
         {
-            var files = GetFiles();
+            var files = GetGeneralFiles();
             var piada = files.Where(q=>q.Contains("rimshot.mp3")).FirstOrDefault();
             if (piada != null) SpeakerCore.ExecuteMP3File(piada);
         }
 
         public static void Clap()
         {
-            var files = GetFiles();
+            var files = GetGeneralFiles();
             var piada = files.Where(q => q.Contains("aplausos.mp3")).FirstOrDefault();
             if (piada != null) SpeakerCore.ExecuteMP3File(piada);
+        }
+
+        public static void Xandao()
+        {
+            var files = GetGeneralFiles();
+            var piada = files.Where(q => q.Contains("xandao.mp3")).FirstOrDefault();
+            if (piada != null) SpeakerCore.ExecuteMP3File(piada);
+        }
+
+        public static void RandomPartySound()
+        {
+            Random rdm = new Random();
+            var files = GetPartyFiles();
+
+            var index = rdm.Next(files.Length);
+
+            SpeakerCore.ExecuteMP3File(files[index]);
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using F23.StringSimilarity;
+using Microsoft.CognitiveServices.Speech.Transcription;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,10 +8,13 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WebMatBot.Core;
+using WebMatBot.Lights;
+using YeelightAPI.Models;
 
 namespace WebMatBot
 {
-    public static class Engine
+    public static class IrcEngine
     {
         private static ClientWebSocket webSocket { get; set; }
 
@@ -30,7 +34,11 @@ namespace WebMatBot
 
                         await Send("PASS " + Parameters.OAuth, CancellationToken.None);
                         await Send("NICK " + Parameters.User, CancellationToken.None);
+                        await Send("CAP REQ :twitch.tv/tags", CancellationToken.None);
+                        await Send("CAP REQ :twitch.tv/commands", CancellationToken.None);
+                        
                         await Send("JOIN #" + Parameters.User, CancellationToken.None);
+                        
 
                         await Respond("Estou conectado... Muito bom estar aqui com vcs...");
 
@@ -68,7 +76,7 @@ namespace WebMatBot
                     using (var reader = new StreamReader(ms, Encoding.UTF8))
                     {
                         var input = await reader.ReadToEndAsync();
-                        //Console.WriteLine(input);
+                        Console.WriteLine(input);
                         if (await Analizer(input))
                         {
                             Cache.AddToCacheMessage(input);
@@ -112,18 +120,18 @@ namespace WebMatBot
                 return false;
             }
 
-            //check all counters and increase if necessary
-            Counters.CheckCounter(input);
-
-            await CheckCommand(input);
-
-            Console.WriteLine(input);
+            //pode receber commando para USERNOTICE ou PRIVMSG, direciona-los
+            if (input.Contains(" PRIVMSG "))
+                await CheckCommand(input.Contains("user-type=") ? input.ToLower().Split("user-type=")[1].Trim() : input);
+            else if (input.Contains(" USERNOTICE "))
+                await CheckNotice(input);
 
             return true;
         }
 
         private static async Task CheckCommand(string input)
         {
+            
             var words = input.ToLower().Split(" ");
             Command command = null;
             bool isDone = false;
@@ -155,6 +163,22 @@ namespace WebMatBot
             {
                 await CommandCorrector(input, words[3].Replace(":", ""));
             }
+            
+        }
+
+        public static async Task CheckNotice(string input)
+        {
+            string[] properties = input.Split(";");
+            var loginPropert = properties.First(q => q.StartsWith("login="));
+            var raider = loginPropert.Split("=")[1];
+
+            //raider é o cidadão q está enviando a raid pra vc
+
+            if (input.Contains("msg-id=raid;"))
+                await TasksQueueOutput.QueueAddSpeech(async () => { 
+                    await AudioVisual.Party("", Parameters.User);
+                    await SpeakerCore.Speak("Muito obrigado, " + raider + ". Você é um Deus...", Parameters.User);
+                });
             
         }
 
